@@ -12,7 +12,7 @@ Algorithm::~Algorithm()
     m_board = nullptr;
 }
 
-Choice RandomAlgorithm::getChoice() const
+Choice RandomAlgorithm::getChoice()
 {
     auto&& board = getBoard();
     if ( !board )
@@ -27,8 +27,23 @@ Choice RandomAlgorithm::getChoice() const
     srand(static_cast<unsigned>(time(nullptr)));
     const auto index = static_cast<size_t>(rand() % size);
 
+    auto it = tileIds.begin();
+    std::advance(it, index);
+
     Choice choice;
     choice.isValid = true;
-    choice.tileId = tileIds[index];
+    choice.tileId = *it;
     return choice;
+}
+
+void Algorithm::setBoard(Board *board)
+{
+    if (m_board == board)
+        return;
+    m_board = board;
+}
+
+Board *Algorithm::getBoard() const
+{
+    return m_board;
 }

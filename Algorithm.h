@@ -6,11 +6,13 @@
 
 class Board;
 
+
 struct Choice
 {
     bool isValid { false };
     uint tileId { 0 };
 };
+
 
 class Algorithm
 {
@@ -18,26 +20,14 @@ public:
     Algorithm();
     virtual ~Algorithm();
 
-    inline void setBoard(Board *board);
-    inline Board *getBoard() const;
+    virtual void setBoard(Board *board);
+    virtual Board *getBoard() const;
 
-    virtual Choice getChoice() const = 0;
+    virtual Choice getChoice() = 0;
 
 private:
     Board *m_board { nullptr };
 };
-
-void Algorithm::setBoard(Board *board)
-{
-    if (m_board == board)
-        return;
-    m_board = board;
-}
-
-Board *Algorithm::getBoard() const
-{
-    return m_board;
-}
 
 
 class RandomAlgorithm : public Algorithm
@@ -50,7 +40,7 @@ public:
     }
 
     // Algorithm interface
-    Choice getChoice() const override;
+    Choice getChoice() override;
 };
 
 #endif // ALGORITHM_H

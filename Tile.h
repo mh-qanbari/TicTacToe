@@ -31,11 +31,13 @@ private:
     uint m_id  {0};
 
 public:
-    Tile(QObject *parent);
-    Tile();
+    Tile(QObject *parent = nullptr);
     Tile(const Tile &);
+    Tile(Tile &&);
 
     Tile &operator=(const Tile &);
+
+    Tile *&&clone() const;
 
     Position getPosition() const
     {

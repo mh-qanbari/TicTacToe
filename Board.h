@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include "Tile.h"
+#include <unordered_set>
 
 //template<>
 //struct std::hash<Tile>
@@ -26,23 +27,32 @@ class Board : public QObject
     Q_OBJECT
 
 public:
-    Board(const uint size = 3, QObject *parent = nullptr);
+    Board(const uint size, QObject *parent = nullptr);
+    Board(const Board &);
+    Board(Board &&);
 
+    Board &operator=(const Board &);
+    Board &operator=(Board &&);
+
+    Board *&&clone() const;
+
+    Tile *getTile(const uint id) const;
     Tile *getTile(const Position &position) const;
-    std::vector<uint> getFilteredIds(Tile::State) const;
+    std::unordered_set<uint> getFilteredIds(Tile::State) const;
 
     inline uint getSize() const;
     inline uint getIndexOf(const Position &position) const;
-    inline Position getPositionOf(const uint index) const;
+    inline Position getPositionOf(const uint id) const;
 
 private:
+    void clear();
     void initTiles();
 
 private:
     //std::unordered_map<uint, Tile*> m_tiles {};
     std::vector<Tile*> m_tiles {};
-    const uint m_size  { 3 };
-    const uint m_size2 { m_size * m_size };
+    uint m_size  { 3 };
+    const char __padding__[4] { " "};  //!< for padding
 };
 
 uint Board::getSize() const
@@ -55,11 +65,11 @@ uint Board::getIndexOf(const Position &position) const
     return m_size * position.row + position.col;
 }
 
-Position Board::getPositionOf(const uint index) const
+Position Board::getPositionOf(const uint id) const
 {
     Position position;
-    position.row = index / m_size;
-    position.col = index % m_size;
+    position.row = id / m_size;
+    position.col = id % m_size;
     return position;
 }
 

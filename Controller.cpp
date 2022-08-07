@@ -29,8 +29,7 @@ Controller::~Controller()
 
 Tile *Controller::getTile(const uint id) const
 {
-    Position&& position = m_board->getPositionOf(id);
-    return m_board->getTile(position);
+    return m_board->getTile(id);
 }
 
 Tile *Controller::getTile(const uint row, const uint col) const
