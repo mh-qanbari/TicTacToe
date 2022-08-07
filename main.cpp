@@ -1,5 +1,6 @@
 #include "Controller.h"
 #include "Algorithm.h"
+#include "MinimaxAlgorithm.h"
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -13,6 +14,8 @@ int main(int argc, char *argv[])
     constexpr uint SIZE { 3 };
     Board *board = new Board(SIZE);
     Algorithm *algorithm = new RandomAlgorithm(board);
+//    Algorithm *algorithm = new MinimaxAlgorithm(8);
+//    algorithm->setBoard(board);
     Controller controller { SIZE, board, algorithm };
 
     QQmlApplicationEngine engine;

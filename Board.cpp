@@ -22,14 +22,21 @@ Board::Board(Board &&other)
 
 Board &Board::operator=(const Board &other)
 {
+    clearTiles();
+
     m_size = other.m_size;
-    initTiles();
+    for (auto&& tile : other.m_tiles)
+    {
+        m_tiles.push_back( new Tile(*tile) );
+    }
+
     return *this;
 }
 
 Board &Board::operator=(Board &&other)
 {
-    clear();
+    m_size = 0;
+    clearTiles();
     std::swap(m_size, other.m_size);
     std::swap(m_tiles, other.m_tiles);
     return *this;
@@ -66,10 +73,8 @@ std::unordered_set<uint> Board::getFilteredIds(Tile::State state) const
     return ids;
 }
 
-void Board::clear()
+void Board::clearTiles()
 {
-    m_size = 0;
-
     while ( !m_tiles.empty() )
     {
         auto it = m_tiles.begin();
@@ -80,7 +85,7 @@ void Board::clear()
 
 void Board::initTiles()
 {
-    clear();
+    clearTiles();
 
     for (uint i = 0; i < (m_size * m_size) ; ++i)
     {

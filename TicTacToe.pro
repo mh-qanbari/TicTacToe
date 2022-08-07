@@ -17,6 +17,7 @@ SOURCES += \
         Algorithm.cpp \
         Board.cpp \
         Controller.cpp \
+        GameUtils.cpp \
         MinimaxAlgorithm.cpp \
         Tile.cpp \
         main.cpp
@@ -38,5 +39,6 @@ HEADERS += \
     Algorithm.h \
     Board.h \
     Controller.h \
+    GameUtils.h \
     MinimaxAlgorithm.h \
     Tile.h

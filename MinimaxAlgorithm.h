@@ -9,6 +9,7 @@ class MinimaxAlgorithm : public Algorithm
 {
 public:
     MinimaxAlgorithm();
+    MinimaxAlgorithm(const uint depth);
 
     uint getDepth() const { return m_depth; }
     void setDepth(const uint &depth) { m_depth = depth; }

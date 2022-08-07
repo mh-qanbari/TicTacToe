@@ -20,6 +20,7 @@ Tile::Tile(Tile &&other)
 
 Tile &Tile::operator=(const Tile &other)
 {
+    m_id = other.m_id;
     m_state = other.m_state;
     m_position = other.m_position;
 

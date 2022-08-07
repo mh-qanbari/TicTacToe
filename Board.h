@@ -45,7 +45,7 @@ public:
     inline Position getPositionOf(const uint id) const;
 
 private:
-    void clear();
+    void clearTiles();
     void initTiles();
 
 private:

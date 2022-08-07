@@ -6,6 +6,11 @@ MinimaxAlgorithm::MinimaxAlgorithm()
 {   
 }
 
+MinimaxAlgorithm::MinimaxAlgorithm(const uint depth)
+    : m_depth(depth)
+{
+}
+
 Choice MinimaxAlgorithm::getChoice()
 {
     m_workingBoard.reset( std::move(getBoard()->clone()) );
@@ -19,7 +24,7 @@ Choice MinimaxAlgorithm::getChoice()
         auto tile = m_workingBoard->getTile( id );
         tile->setState( Tile::State::Computer );
 
-        const int score = minimax( m_depth, false );
+        const int score = minimax( m_depth, true );
         if ( score > bestScore )
         {
             bestScore = score;
@@ -38,11 +43,11 @@ Choice MinimaxAlgorithm::getChoice()
 int MinimaxAlgorithm::minimax(const uint depth, const bool maximizing)
 {
     if (depth == 0)
-        return 0;
+        return 1;
 
     auto&& emptyTileIds = m_workingBoard->getFilteredIds( Tile::State::None );
     if (emptyTileIds.empty())
-        return 0;
+        return 1;
 
     int score = maximizing
             ? - static_cast<int>( m_workingBoard->getSize() )

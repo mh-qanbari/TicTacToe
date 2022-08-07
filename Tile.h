@@ -7,6 +7,10 @@ struct Position
 {
     uint row { 0 };
     uint col { 0 };
+
+    Position() = default;
+    Position(const uint row, const uint col)
+        : row(row) , col(col) { }
 };
 
 class Tile : public QObject
