@@ -11,11 +11,13 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    constexpr uint SIZE { 3 };
+    constexpr uint SIZE  { 3 };
+    constexpr uint DEPTH { 6 };
+
     Board *board = new Board(SIZE);
-    Algorithm *algorithm = new RandomAlgorithm(board);
-//    Algorithm *algorithm = new MinimaxAlgorithm(8);
-//    algorithm->setBoard(board);
+//    Algorithm *algorithm = new RandomAlgorithm(board);
+    Algorithm *algorithm = new MinimaxAlgorithm(DEPTH);
+    algorithm->setBoard(board);
     Controller controller { SIZE, board, algorithm };
 
     QQmlApplicationEngine engine;

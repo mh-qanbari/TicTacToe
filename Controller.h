@@ -25,12 +25,6 @@ protected:
     Q_INVOKABLE void setTileState(const uint id, const Tile::State state);
 
 private:
-    bool check(uint id) const;
-    bool check(const Position &position) const;
-    bool checkRow(const Position &position) const;
-    bool checkCol(const Position &position) const;
-    bool checkDiags(const Position &position) const;
-
     static constexpr uint GetRowOf(const uint id);
     static constexpr uint GetColOf(const uint id);
     static constexpr uint GetIndexOf(const uint row, const uint col);
