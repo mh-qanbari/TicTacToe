@@ -1,9 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
-import QtQuick.Layouts 1.12
-import QtQuick.Dialogs 1.2
-
-import Tile.State 1.0
+import QtQuick.Controls 2.12
 
 Window {
     visible: true
@@ -11,94 +8,36 @@ Window {
     height: 400
     title: qsTr("TicTacToe")
 
+    Style {
+        id: style
+    }
+
     Rectangle {
-        anchors.fill: parent
-        color: "yellow"
         z: -1
+        color: style.background.color
     }
 
-    GridLayout {
-        columns: 3
-        rows: 3
+    StackView {
+        id: stack_view
+        initialItem: view_config
+        anchors.fill: parent
+    }
 
-        anchors.centerIn: parent
+    Component {
+        id: view_config
 
-        TileItem {
-            Layout.column: 0
-            Layout.row: 0
-            model: controller.getTile(Layout.row, Layout.column);
-        }
-        TileItem {
-            Layout.column: 1
-            Layout.row: 0
-            model: controller.getTile(Layout.row, Layout.column);
-        }
-        TileItem {
-            Layout.column: 2
-            Layout.row: 0
-            model: controller.getTile(Layout.row, Layout.column);
-        }
-
-
-        TileItem {
-            Layout.column: 0
-            Layout.row: 1
-            model: controller.getTile(Layout.row, Layout.column);
-        }
-        TileItem {
-            Layout.column: 1
-            Layout.row: 1
-            model: controller.getTile(Layout.row, Layout.column);
-        }
-        TileItem {
-            Layout.column: 2
-            Layout.row: 1
-            model: controller.getTile(Layout.row, Layout.column);
-        }
-
-        TileItem {
-            Layout.column: 0
-            Layout.row: 2
-            model: controller.getTile(Layout.row, Layout.column);
-        }
-        TileItem {
-            Layout.column: 1
-            Layout.row: 2
-            model: controller.getTile(Layout.row, Layout.column);
-        }
-        TileItem {
-            Layout.column: 2
-            Layout.row: 2
-            model: controller.getTile(Layout.row, Layout.column);
+        ConfigItem {
+            onStarted: {
+                stack_view.push(view_board)
+                controller.start();
+            }
         }
     }
 
-    MessageDialog {
-        id: messageDialog
-        title: "Game is Finished"
+    Component {
+        id: view_board
 
-        property int winner: 0
-
-        text: {
-            if (winner === Tile.User)
-                return "User Won!"
-            else if (winner === Tile.Computer)
-                return "Game Over!"
-            else
-                return "Draw!"
-        }
-
-        onAccepted: {
-            console.log(text)
-            Qt.quit()
-        }
-    }
-
-    Connections {
-        target: controller
-        onGameFinished: {
-            messageDialog.winner = winner
-            messageDialog.open()
+        BoardItem {
         }
     }
 }

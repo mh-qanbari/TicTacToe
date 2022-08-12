@@ -1,17 +1,29 @@
 #include "Controller.h"
 #include "Algorithm.h"
 #include "GameUtils.h"
+#include "MinimaxAlgorithm.h"
 #include <QGuiApplication>
 
 
-Controller::Controller(const uint size, Board *board,
-                       Algorithm *algorithm, QObject *parent)
-    : QObject(parent)
-    , m_algorithm(algorithm)
-    , m_board(board)
-    , m_size(size)
+struct Controller::Impl
 {
+    ::Algorithm *algorithm  { nullptr };
+    Controller::Algorithm alg { Controller::Alg_Random };
+    uint difficulty { 0 };
+    uint boardSize  { 3 };
+    const char __padding__[4] { "" };
+};
+
+
+Controller::Controller(const uint size, Board *board, QObject *parent)
+    : QObject(parent)
+    , m_impl(new Impl)
+    , m_board(board)
+{
+    Controller::register_qml();
     Tile::register_qml();
+
+    m_impl->boardSize = size;
 }
 
 Controller::Controller()
@@ -21,10 +33,10 @@ Controller::Controller()
 
 Controller::~Controller()
 {
-    if ( !m_algorithm )
+    if ( !m_impl->algorithm )
     {
-        delete m_algorithm;
-        m_algorithm = nullptr;
+        delete m_impl->algorithm;
+        m_impl->algorithm = nullptr;
     }
 }
 
@@ -44,7 +56,7 @@ Tile *Controller::getTile(const uint row, const uint col) const
 
 void Controller::setTileState(const uint id, const Tile::State state)
 {
-    if ( id >= (m_size * m_size) )
+    if ( id >= (m_impl->boardSize * m_impl->boardSize) )
         return;
 
     auto&& tile = getTile(id);
@@ -66,7 +78,7 @@ void Controller::setTileState(const uint id, const Tile::State state)
             return;
         }
 
-        auto&& choice = m_algorithm->getChoice();
+        auto&& choice = m_impl->algorithm->getChoice();
         if ( choice.isValid )
         {
             tile = getTile(choice.tileId);
@@ -85,4 +97,72 @@ void Controller::setTileState(const uint id, const Tile::State state)
             return;
         }
     }
+}
+
+QVariantMap Controller::getDifficulty(Controller::Algorithm alg) const
+{
+    QVariantMap difficulty;
+    difficulty["valid"] = false;
+    difficulty["value"] = 0;
+    difficulty["min"] = 0;
+    difficulty["max"] = 0;
+
+    switch (alg) {
+    case Alg_Random:
+        break;
+    case Alg_Minimax:
+    {
+        difficulty["valid"] = true;
+        difficulty["value"] = 1;
+        difficulty["min"] = 1;
+        difficulty["max"] = 8;
+    } break;
+    }
+
+    return difficulty;
+}
+
+QVariantMap Controller::getAlgorithms() const
+{
+    QVariantMap algorithms;
+    algorithms["list"] = QStringList({"random", "minimax"});
+    algorithms["random"] = Alg_Random;
+    algorithms["minimax"] = Alg_Minimax;
+    return algorithms;
+}
+
+void Controller::setAlgorithm(Controller::Algorithm alg, uint difficulty)
+{
+    m_impl->alg = alg;
+    switch (alg) {
+    case Alg_Minimax:
+        m_impl->difficulty = difficulty;
+        break;
+    default:
+        break;
+    }
+}
+
+void Controller::start()
+{
+    if (m_impl->algorithm)
+    {
+        delete m_impl->algorithm;
+        m_impl->algorithm = nullptr;
+    }
+
+    switch (m_impl->alg) {
+    case Alg_Random:
+        m_impl->algorithm = new RandomAlgorithm { m_board };
+        break;
+    case Alg_Minimax:
+        m_impl->algorithm = new MinimaxAlgorithm { m_impl->difficulty };
+        m_impl->algorithm->setBoard( m_board );
+        break;
+    }
+}
+
+void Controller::register_qml() const
+{
+    qRegisterMetaType<Controller::Algorithm>("Controller::Algorithm");
 }

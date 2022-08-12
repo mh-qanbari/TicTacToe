@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtGraphicalEffects 1.0
 
 import Tile.State 1.0
 
@@ -8,7 +9,10 @@ Item {
     height: 100
 
     property Tile model: null
-    property color bgcolor: "white"
+
+    Style {
+        id: style
+    }
 
     Item {
         anchors.fill: parent
@@ -31,18 +35,35 @@ Item {
                 }
                 return ""
             }
+            z:2
+            scale: 0.8
+            antialiasing: true
+        }
+
+        ColorOverlay{
+            anchors.fill: icon
+            source: icon
+            color: style.tile.color
+            transform: rotation
+            antialiasing: true
+            z: icon.z
+            scale: icon.scale
+
         }
         Rectangle {
             id: rect
             anchors.fill: parent
-            visible: root.model ? root.model.state === Tile.None : true
-            color: root.bgcolor
+            //visible: root.model ? root.model.state === Tile.None : true
+            color: style.tile.background
+            radius: 10
+            z:1
         }
 
         MouseArea {
             anchors.fill: parent
             enabled: root.model && root.model.state === Tile.None
             acceptedButtons: Qt.LeftButton | Qt.RightButton
+            z:2
 
             onClicked: {
                 if ( !root.model ) {

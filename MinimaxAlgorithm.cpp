@@ -4,7 +4,7 @@
 #include <iostream>
 
 
-struct MinimaxAlgorithm::Working
+struct MinimaxAlgorithm::Impl
 {
     std::shared_ptr<Board> board { nullptr };
     uint step { 0 };
@@ -13,7 +13,7 @@ struct MinimaxAlgorithm::Working
 
 
 MinimaxAlgorithm::MinimaxAlgorithm(const uint depth)
-    : m_working( new Working )
+    : m_impl( new Impl )
     , m_depth( depth )
 {
 }
@@ -25,8 +25,8 @@ MinimaxAlgorithm::MinimaxAlgorithm()
 
 Choice MinimaxAlgorithm::getChoice()
 {    
-    m_working->board.reset( std::move(getBoard()->clone()) );
-    m_working->step = 0;
+    m_impl->board.reset( std::move(getBoard()->clone()) );
+    m_impl->step = 0;
 
 
     // -- new version
@@ -69,7 +69,7 @@ int MinimaxAlgorithm::minimax(const uint depth, const bool maximizing)
     if (depth == 0)
         return 1;
 
-    auto&& emptyTileIds = m_working->board->getFilteredIds( Tile::State::None );
+    auto&& emptyTileIds = m_impl->board->getFilteredIds( Tile::State::None );
     if (emptyTileIds.empty())
         return 1;
 
@@ -77,8 +77,8 @@ int MinimaxAlgorithm::minimax(const uint depth, const bool maximizing)
             ? Tile::State::User
             : Tile::State::Computer;
 
-    const auto minScore = - static_cast<int>( m_working->board->getSize() );
-    const auto maxScore = + static_cast<int>( m_working->board->getSize() );
+    const auto minScore = - static_cast<int>( m_impl->board->getSize() );
+    const auto maxScore = + static_cast<int>( m_impl->board->getSize() );
 
     int score = maximizing ? minScore : maxScore;
 
@@ -88,11 +88,11 @@ int MinimaxAlgorithm::minimax(const uint depth, const bool maximizing)
 
     for (auto&& id : emptyTileIds)
     {
-        auto tile = m_working->board->getTile( id );
+        auto tile = m_impl->board->getTile( id );
         tile->setState( state );
 
         int score_ { 0 };
-        if (GameUtils::isWon(m_working->board.get(), state))
+        if (GameUtils::isWon(m_impl->board.get(), state))
             score_ = minScore;//maximizing ? minScore : maxScore;
         else
             score_ = minimax(depth - 1, !maximizing);
@@ -108,36 +108,36 @@ MinimaxAlgorithm::Result MinimaxAlgorithm::runMin()
 {
     Result result;
 
-    if (m_working->step == m_depth)
+    if (m_impl->step == m_depth)
     {
         result.score = 0;
         return result;
     }
 
-    ++m_working->step;
+    ++m_impl->step;
 
-    auto&& emptyTileIds = m_working->board->getFilteredIds(Tile::State::None);
+    auto&& emptyTileIds = m_impl->board->getFilteredIds(Tile::State::None);
     if (emptyTileIds.empty())
     {
         result.score = 0;
-        --m_working->step;
+        --m_impl->step;
         return result;
     }
 
-    const auto maxScore = + static_cast<int>( m_working->board->getSize() + 1 );
+    const auto maxScore = + static_cast<int>( m_impl->board->getSize() + 1 );
     const auto minScore = - maxScore;
 
     result.score = maxScore;
 
     for (auto&& id : emptyTileIds)
     {
-        auto tile = m_working->board->getTile(id);
+        auto tile = m_impl->board->getTile(id);
         tile->setState(Tile::State::Computer);
 
         int score { 0 };
 
 
-        if (GameUtils::isWon(m_working->board.get(), Tile::State::Computer))
+        if (GameUtils::isWon(m_impl->board.get(), Tile::State::Computer))
         {
             score = minScore;
             // TODO: no need to continue.
@@ -145,7 +145,7 @@ MinimaxAlgorithm::Result MinimaxAlgorithm::runMin()
             result.choice.tileId = id;
             result.choice.isValid = true;
             tile->setState(Tile::State::None);
-            --m_working->step;
+            --m_impl->step;
             return result;
         }
         else
@@ -163,7 +163,7 @@ MinimaxAlgorithm::Result MinimaxAlgorithm::runMin()
         }
     }
 
-    --m_working->step;
+    --m_impl->step;
     return result;
 }
 
@@ -171,35 +171,35 @@ MinimaxAlgorithm::Result MinimaxAlgorithm::runMax()
 {
     Result result;
 
-    if (m_working->step == m_depth)
+    if (m_impl->step == m_depth)
     {
         result.score = 0;
         return result;
     }
 
-    ++m_working->step;
+    ++m_impl->step;
 
-    auto&& emptyTileIds = m_working->board->getFilteredIds(Tile::State::None);
+    auto&& emptyTileIds = m_impl->board->getFilteredIds(Tile::State::None);
     if (emptyTileIds.empty())
     {
         result.score = 0;
-        --m_working->step;
+        --m_impl->step;
         return result;
     }
 
-    const auto maxScore = + static_cast<int>( m_working->board->getSize() + 1 );
+    const auto maxScore = + static_cast<int>( m_impl->board->getSize() + 1 );
     const auto minScore = - maxScore;
 
     result.score = minScore;
 
     for (auto&& id : emptyTileIds)
     {
-        auto tile = m_working->board->getTile(id);
+        auto tile = m_impl->board->getTile(id);
         tile->setState(Tile::State::User);
 
         int score { 0 };
 
-        if (GameUtils::isWon(m_working->board.get(), Tile::State::User))
+        if (GameUtils::isWon(m_impl->board.get(), Tile::State::User))
         {
             score = maxScore;
             // TODO: no need to continue
@@ -207,7 +207,7 @@ MinimaxAlgorithm::Result MinimaxAlgorithm::runMax()
             result.choice.tileId = id;
             result.choice.isValid = true;
             tile->setState(Tile::State::None);
-            --m_working->step;
+            --m_impl->step;
             return result;
         }
         else
@@ -225,7 +225,7 @@ MinimaxAlgorithm::Result MinimaxAlgorithm::runMax()
         }
     }
 
-    --m_working->step;
+    --m_impl->step;
     return result;
 }
 

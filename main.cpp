@@ -15,10 +15,7 @@ int main(int argc, char *argv[])
     constexpr uint DEPTH { 6 };
 
     Board *board = new Board(SIZE);
-//    Algorithm *algorithm = new RandomAlgorithm(board);
-    Algorithm *algorithm = new MinimaxAlgorithm(DEPTH);
-    algorithm->setBoard(board);
-    Controller controller { SIZE, board, algorithm };
+    Controller controller { SIZE, board, &app };
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

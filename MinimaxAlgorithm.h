@@ -24,8 +24,8 @@ private:
     Result runMax();
 
 private:
-    struct Working;
-    std::unique_ptr<Working> m_working;
+    struct Impl;
+    std::unique_ptr<Impl> m_impl;
     uint m_depth { 1 };
     const char __padding__[4] { "" };  //!< for padding
 };
