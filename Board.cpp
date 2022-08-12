@@ -47,6 +47,12 @@ Board *&&Board::clone() const
     return std::move( new Board(*this) );
 }
 
+void Board::reset()
+{
+    for (auto&& tile : m_tiles)
+        tile->reset();
+}
+
 Tile *Board::getTile(const uint id) const
 {
     auto&& position = getPositionOf( id );

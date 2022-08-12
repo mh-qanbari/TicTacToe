@@ -1,6 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import QtQuick.Controls.Styles 1.4
+
 
 Item {
     id: root
@@ -10,119 +12,136 @@ Item {
     Rectangle {
         z: -1
         anchors.fill: parent
-        color: style.background.color
+        color: style.background.level2
     }
 
     Style {
         id: style
     }
 
-    GridLayout {
-        rows: 4
-        columns: 2
-        anchors.fill: parent
-        anchors.margins: 10
+    SpinBox {
+        id: spin_difficulty
+        y: parent.height * 0.4
+        x: (parent.width - width) / 2
+        height: parent.height * 0.1
+        width: parent.width * 0.8
+        leftPadding: height + 5
+        from: controller.getDifficulty().min
+        to: controller.getDifficulty().max
+        value: controller.getDifficulty().value
 
-        Label {
-            text: "Algorithm"
+        textFromValue: function() { return controller.getDifficultyText(value) }
+
+        contentItem: Label {
+            horizontalAlignment: Label.AlignHCenter
+            verticalAlignment: Label.AlignVCenter
+            text: parent.textFromValue()
+            color: style.item.color
+            font.pixelSize: 30
         }
-        ComboBox {
-            id: combo_algs
-            Layout.fillWidth: true
-            model: controller.getAlgorithms().list
-            property var currentData: controller.getAlgorithms()[currentText]
-            background: Rectangle {
-                color: parent.hovered ? style.background.level5 : style.background.level4
+
+        background: Rectangle {
+            anchors.fill: parent
+            //color: parent.hovered ? style.background.level3 : style.background.level2
+            color: style.item.background
+        }
+
+        down.indicator: Button {
+            height: parent.height
+            width: height
+            flat: true
+            //hoverEnabled: true
+
+            contentItem: Label {
+                text: "\u25C4"
+                horizontalAlignment: Label.AlignHCenter
+                verticalAlignment: Label.AlignVCenter
+                color: parent.enabled ? style.item.color : "gray"
+                font.pixelSize: 20
             }
-        }
 
-        Label {
-            text: "Difficulty"
-        }
-        SpinBox {
-            id: spin_difficulty
-            Layout.fillWidth: true
-            enabled: controller.getDifficulty(combo_algs.currentData).valid
-            from: controller.getDifficulty(combo_algs.currentData).min
-            to: controller.getDifficulty(combo_algs.currentData).max
-            value: controller.getDifficulty(combo_algs.currentData).value
             background: Rectangle {
                 anchors.fill: parent
-                color: parent.hovered ? style.background.level5 : style.background.level4
-            }
-            down.indicator: Button {
-                height: parent.height
-                width: height
-                flat: true
-                text: "-"
-                hoverEnabled: true
-                background: Rectangle {
-                    anchors.fill: parent
-                    color: {
-                        if (parent.pressed)
-                            return style.background.level3
-                        else if (parent.hovered)
-                            return style.background.level5
-                        else
-                            return style.background.level4
-                    }
-                }
-                onClicked: {
-                    parent.value -= 1
-                }
-            }
-            up.indicator: Button {
-                anchors.right: parent.right
-                height: parent.height
-                width: height
-                flat: true
-                text: "+"
-                hoverEnabled: true
-                background: Rectangle {
-                    anchors.fill: parent
-                    color: {
-                        if (parent.pressed)
-                            return style.background.level3
-                        else if (parent.hovered)
-                            return style.background.level5
-                        else
-                            return style.background.level4
-                    }
-                }
-                onClicked: {
-                    parent.value += 1
-                }
-            }
-        }
-
-        Item {
-            Layout.columnSpan: 2
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-        }
-
-        Item {
-            Layout.fillWidth: true
-        }
-        Button {
-            text: "Start"
-            Layout.preferredHeight: 30
-            Layout.fillWidth: true
-            onClicked: {
-                controller.setAlgorithm(combo_algs.currentData, spin_difficulty.value)
-                started()
-            }
-            background: Rectangle {
                 color: {
-                    if (parent.pressed && parent.hovered)
+                    if (parent.pressed)
                         return style.background.level1
-                    else if (parent.pressed)
-                        return style.background.level2
-                    else if (parent.hovered)
-                        return style.background.level4
+                    //else if (parent.hovered)
+                    //    return style.background.level3
                     else
-                        return style.background.level3
+                        return style.background.level2
                 }
+            }
+
+            onClicked: {
+                const value = parent.value - controller.getDifficulty().step
+                controller.setDifficulty(value)
+                parent.value = value
+            }
+        }
+        up.indicator: Button {
+            anchors.right: parent.right
+            height: parent.height
+            width: height
+            flat: true
+            //hoverEnabled: true
+
+            contentItem: Label {
+                text: "\u25BA"
+                horizontalAlignment: Label.AlignHCenter
+                verticalAlignment: Label.AlignVCenter
+                color: parent.enabled ? style.item.color : "gray"
+                font.pixelSize: 20
+            }
+
+            background: Rectangle {
+                anchors.fill: parent
+                color: {
+                    if (parent.pressed)
+                        return style.background.level1
+                    //else if (parent.hovered)
+                    //    return style.background.level3
+                    else
+                        return style.background.level2
+                }
+            }
+
+            onClicked: {
+                const value = parent.value + controller.getDifficulty().step
+                controller.setDifficulty(value)
+                parent.value = value
+            }
+        }
+    }
+
+    Button {
+        x: (parent.width - width) / 2
+        y: spin_difficulty.y + spin_difficulty.height + parent.height * 0.05
+        height: spin_difficulty.height * 1.3
+        width: spin_difficulty.width - spin_difficulty.height * 2
+        Layout.preferredHeight: 30
+        Layout.fillWidth: true
+
+        contentItem: Label {
+            horizontalAlignment: Label.AlignHCenter
+            verticalAlignment: Label.AlignVCenter
+            text: "Start"
+            color: style.item.color
+            font.pixelSize: 40
+            font.bold: true
+        }
+
+        onClicked: {
+            started()
+        }
+
+        background: Rectangle {
+            color: {
+                if (parent.pressed)
+                    return style.background.level1
+                else //if (parent.hovered)
+                    return style.background.level3
+                //else
+                //    return style.background.level2
             }
         }
     }

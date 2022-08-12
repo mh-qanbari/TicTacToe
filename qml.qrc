@@ -6,6 +6,7 @@
         <file>ConfigItem.qml</file>
         <file>BoardItem.qml</file>
         <file>Style.qml</file>
+        <file>FinishDialog.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file>icons/x.png</file>

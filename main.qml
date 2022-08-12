@@ -4,9 +4,10 @@ import QtQuick.Controls 2.12
 
 Window {
     visible: true
-    width: 400
-    height: 400
+    width: 330
+    height: 330
     title: qsTr("TicTacToe")
+    flags: Qt.Dialog
 
     Style {
         id: style
@@ -14,13 +15,14 @@ Window {
 
     Rectangle {
         z: -1
-        color: style.background.color
+        color: style.background.level1
     }
 
     StackView {
         id: stack_view
-        initialItem: view_config
+        initialItem: view_board
         anchors.fill: parent
+        Component.onCompleted: push(view_config)
     }
 
     Component {
@@ -28,7 +30,7 @@ Window {
 
         ConfigItem {
             onStarted: {
-                stack_view.push(view_board)
+                stack_view.pop()
                 controller.start();
             }
         }
@@ -38,6 +40,13 @@ Window {
         id: view_board
 
         BoardItem {
+            onResetRequested: {
+                stack_view.push(view_config)
+                controller.reset()
+            }
+            onReplayRequested: {
+                controller.reset()
+            }
         }
     }
 }

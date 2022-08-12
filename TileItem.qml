@@ -43,18 +43,19 @@ Item {
         ColorOverlay{
             anchors.fill: icon
             source: icon
-            color: style.tile.color
+            color: style.tile.background
             transform: rotation
             antialiasing: true
             z: icon.z
             scale: icon.scale
 
         }
+
         Rectangle {
             id: rect
             anchors.fill: parent
-            //visible: root.model ? root.model.state === Tile.None : true
-            color: style.tile.background
+            color: root.model && root.model.state === Tile.None
+                   ? style.tile.background : style.tile.color
             radius: 10
             z:1
         }
@@ -78,30 +79,4 @@ Item {
             }
         }
     }
-
-//    property real radius: 2
-//
-//    Rectangle {
-//        id: rect_fill
-//        radius: root.radius
-//        anchors.fill: parent
-//        color: taphandler.pressed ? "white" : "gray"
-//    }
-//
-//    Rectangle {
-//        id: rect_border
-//        radius: root.radius
-//        anchors.fill: parent
-//        border.color: hoverhandler.hovered ? "green" : rect_fill.color
-//        border.width: hoverhandler.hovered ? 3 : 1
-//        color: "transparent"
-//    }
-//
-//    TapHandler {
-//        id: taphandler
-//    }
-//
-//    HoverHandler {
-//        id: hoverhandler
-//    }
 }

@@ -42,6 +42,7 @@ public:
     Tile &operator=(const Tile &);
 
     Tile *&&clone() const;
+    void reset();
 
     Position getPosition() const
     {

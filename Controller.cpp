@@ -5,11 +5,16 @@
 #include <QGuiApplication>
 
 
+constexpr auto DIFFICULTY_STEP    = 3;
+constexpr auto DIFFICULTY_MIN     = 1;
+constexpr auto DIFFICULTY_DEFAULT = 4;
+constexpr auto DIFFICULTY_MAX     = 7;
+
 struct Controller::Impl
 {
     ::Algorithm *algorithm  { nullptr };
-    Controller::Algorithm alg { Controller::Alg_Random };
-    uint difficulty { 0 };
+    Controller::Algorithm alg { Controller::Alg_Minimax };
+    uint difficulty { DIFFICULTY_DEFAULT };
     uint boardSize  { 3 };
     const char __padding__[4] { "" };
 };
@@ -99,27 +104,25 @@ void Controller::setTileState(const uint id, const Tile::State state)
     }
 }
 
-QVariantMap Controller::getDifficulty(Controller::Algorithm alg) const
+QVariantMap Controller::getDifficulty() const
 {
     QVariantMap difficulty;
-    difficulty["valid"] = false;
-    difficulty["value"] = 0;
-    difficulty["min"] = 0;
-    difficulty["max"] = 0;
-
-    switch (alg) {
-    case Alg_Random:
-        break;
-    case Alg_Minimax:
-    {
-        difficulty["valid"] = true;
-        difficulty["value"] = 1;
-        difficulty["min"] = 1;
-        difficulty["max"] = 8;
-    } break;
-    }
-
+    difficulty["valid"] = true;
+    difficulty["value"] = m_impl->difficulty;
+    difficulty["min"]   = DIFFICULTY_MIN;
+    difficulty["max"]   = DIFFICULTY_MAX;
+    difficulty["step"]  = DIFFICULTY_STEP;
     return difficulty;
+}
+
+QString Controller::getDifficultyText() const
+{
+    switch (m_impl->difficulty) {
+    case DIFFICULTY_MIN:      return "Easy";
+    case DIFFICULTY_DEFAULT:  return "Medium";
+    case DIFFICULTY_MAX:      return "Hard";
+    }
+    return "Medium";
 }
 
 QVariantMap Controller::getAlgorithms() const
@@ -131,16 +134,15 @@ QVariantMap Controller::getAlgorithms() const
     return algorithms;
 }
 
-void Controller::setAlgorithm(Controller::Algorithm alg, uint difficulty)
+#include <QDebug>
+void Controller::setDifficulty(uint difficulty)
 {
-    m_impl->alg = alg;
-    switch (alg) {
-    case Alg_Minimax:
-        m_impl->difficulty = difficulty;
-        break;
-    default:
-        break;
-    }
+    m_impl->difficulty = ((difficulty < DIFFICULTY_MIN)
+                          ? DIFFICULTY_MIN
+                          : ((difficulty > DIFFICULTY_MAX)
+                             ? DIFFICULTY_MAX
+                             : difficulty));
+//    qDebug() << "difficulty: " << m_impl->difficulty;
 }
 
 void Controller::start()
@@ -151,15 +153,23 @@ void Controller::start()
         m_impl->algorithm = nullptr;
     }
 
-    switch (m_impl->alg) {
-    case Alg_Random:
-        m_impl->algorithm = new RandomAlgorithm { m_board };
-        break;
-    case Alg_Minimax:
+    //switch (m_impl->alg) {
+    //case Alg_Random:
+    //    m_impl->algorithm = new RandomAlgorithm { m_board };
+    //    break;
+    //case Alg_Minimax:
         m_impl->algorithm = new MinimaxAlgorithm { m_impl->difficulty };
         m_impl->algorithm->setBoard( m_board );
-        break;
-    }
+    //    break;
+    //}
+        qDebug() << "difficulty: " << m_impl->difficulty;
+
+}
+
+void Controller::reset()
+{
+    m_board->reset();
+    emit resetGame();
 }
 
 void Controller::register_qml() const

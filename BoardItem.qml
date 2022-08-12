@@ -14,7 +14,7 @@ Item {
 
     Rectangle {
         anchors.fill: parent
-        color: style.background.color
+        color: style.background.level2
         z: -1
     }
 
@@ -74,32 +74,29 @@ Item {
         }
     }
 
-    MessageDialog {
-        id: messageDialog
-        title: "Game is Finished"
-
-        property int winner: 0
-
-        text: {
-            if (winner === Tile.User)
-                return "User Won!"
-            else if (winner === Tile.Computer)
-                return "Game Over!"
-            else
-                return "Draw!"
-        }
-
-        onAccepted: {
-            console.log(text)
-            Qt.quit()
-        }
+    signal resetRequested()
+    signal replayRequested()
+    FinishDialog {
+        id: finishDialog
+        width: root.width
+        height: root.height * 0.3
+        onQuitRequested: Qt.quit()
+        onResetRequested: root.resetRequested()
+        onReplayRequested: root.replayRequested()
+        onRejected: Qt.quit()
     }
-
     Connections {
         target: controller
         onGameFinished: {
-            messageDialog.winner = winner
-            messageDialog.open()
+            finishDialog.text =
+                    (winner === Tile.User)
+                    ? "User Won!"
+                    : (winner === Tile.Computer)
+                      ? "Game Over!"
+                      : "Draw!"
+            console.log("state: ", finishDialog.text)
+
+            finishDialog.show()
         }
     }
 }

@@ -27,10 +27,12 @@ protected:
     Q_INVOKABLE Tile *getTile(const uint id) const;
     Q_INVOKABLE Tile *getTile(const uint row, const uint col) const;
     Q_INVOKABLE void setTileState(const uint id, const Tile::State state);
-    Q_INVOKABLE QVariantMap getDifficulty(Controller::Algorithm) const;
+    Q_INVOKABLE QVariantMap getDifficulty() const;
+    Q_INVOKABLE QString getDifficultyText() const;
     Q_INVOKABLE QVariantMap getAlgorithms() const;
-    Q_INVOKABLE void setAlgorithm(Controller::Algorithm alg, uint difficulty);
+    Q_INVOKABLE void setDifficulty(uint difficulty);
     Q_INVOKABLE void start();
+    Q_INVOKABLE void reset();
 
 private:
     void register_qml() const;
@@ -40,6 +42,7 @@ private:
 
 signals:
     void gameFinished(Tile::State winner) const;
+    void resetGame() const;
 
 private:
     struct Impl;

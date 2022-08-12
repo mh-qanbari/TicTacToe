@@ -35,6 +35,7 @@ public:
     Board &operator=(Board &&);
 
     Board *&&clone() const;
+    void reset();
 
     Tile *getTile(const uint id) const;
     Tile *getTile(const Position &position) const;

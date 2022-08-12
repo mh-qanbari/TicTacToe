@@ -31,3 +31,8 @@ Tile *&&Tile::clone() const
 {
     return std::move( new Tile(*this) );
 }
+
+void Tile::reset()
+{
+    setState(State::None);
+}
