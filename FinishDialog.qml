@@ -45,7 +45,7 @@ Window {
             Layout.fillWidth: true
             Layout.preferredHeight: 30
             verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter//Left
+            horizontalAlignment: Text.AlignHCenter
             text: root.text
             color: style.item.color
             font.bold: true
@@ -61,7 +61,6 @@ Window {
                 anchors.margins: 10
 
                 Button {
-                    //Layout.preferredHeight: 30
                     Layout.fillWidth: true
 
                     contentItem: Label {
@@ -90,7 +89,6 @@ Window {
                 }
 
                 Button {
-                    //Layout.preferredHeight: 30
                     Layout.fillWidth: true
 
                     contentItem: Label {
@@ -119,7 +117,6 @@ Window {
                 }
 
                 Button {
-                    //Layout.preferredHeight: 30
                     Layout.fillWidth: true
 
                     contentItem: Label {
@@ -156,6 +153,5 @@ Window {
             return
         }
         (response.accepted) ? accepted() : rejected()
-        console.log("FinishDialog accept/reject: ", response.accepted)
     }
 }

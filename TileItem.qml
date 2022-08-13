@@ -73,9 +73,6 @@ Item {
                 }
 
                 controller.setTileState(root.model.id, Tile.User);
-                // [test]
-                if (mouse.button === Qt.RightButton)
-                    root.model.state = Tile.Computer;
             }
         }
     }

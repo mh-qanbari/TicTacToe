@@ -42,7 +42,6 @@ Item {
 
         background: Rectangle {
             anchors.fill: parent
-            //color: parent.hovered ? style.background.level3 : style.background.level2
             color: style.item.background
         }
 
@@ -50,7 +49,6 @@ Item {
             height: parent.height
             width: height
             flat: true
-            //hoverEnabled: true
 
             contentItem: Label {
                 text: "\u25C4"
@@ -65,8 +63,6 @@ Item {
                 color: {
                     if (parent.pressed)
                         return style.background.level1
-                    //else if (parent.hovered)
-                    //    return style.background.level3
                     else
                         return style.background.level2
                 }
@@ -83,7 +79,6 @@ Item {
             height: parent.height
             width: height
             flat: true
-            //hoverEnabled: true
 
             contentItem: Label {
                 text: "\u25BA"
@@ -98,8 +93,6 @@ Item {
                 color: {
                     if (parent.pressed)
                         return style.background.level1
-                    //else if (parent.hovered)
-                    //    return style.background.level3
                     else
                         return style.background.level2
                 }
@@ -136,12 +129,8 @@ Item {
 
         background: Rectangle {
             color: {
-                if (parent.pressed)
-                    return style.background.level1
-                else //if (parent.hovered)
-                    return style.background.level3
-                //else
-                //    return style.background.level2
+                return parent.pressed ? style.background.level1
+                                      : style.background.level3
             }
         }
     }

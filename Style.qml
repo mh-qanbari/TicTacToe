@@ -14,12 +14,8 @@ QtObject {
         readonly property color color: "#E5C550"
     }
 
-    readonly property var board: QtObject {
-        readonly property color background: "yellow"
-    }
-
     readonly property var tile: QtObject {
         readonly property color background: "#E5C550"
-        readonly property color color: "#4079B2"//"#498ACB"
+        readonly property color color: "#4079B2"
     }
 }

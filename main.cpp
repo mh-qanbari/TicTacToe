@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     constexpr uint SIZE  { 3 };
-    //constexpr uint DEPTH { 6 };
 
     Board *board = new Board(SIZE);
     Controller controller { SIZE, board, &app };

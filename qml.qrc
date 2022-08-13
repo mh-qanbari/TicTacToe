@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>main_.qml</file>
         <file>TileItem.qml</file>
         <file>main.qml</file>
         <file>ConfigItem.qml</file>

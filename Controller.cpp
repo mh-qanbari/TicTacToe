@@ -134,7 +134,6 @@ QVariantMap Controller::getAlgorithms() const
     return algorithms;
 }
 
-#include <QDebug>
 void Controller::setDifficulty(uint difficulty)
 {
     m_impl->difficulty = ((difficulty < DIFFICULTY_MIN)
@@ -142,7 +141,6 @@ void Controller::setDifficulty(uint difficulty)
                           : ((difficulty > DIFFICULTY_MAX)
                              ? DIFFICULTY_MAX
                              : difficulty));
-//    qDebug() << "difficulty: " << m_impl->difficulty;
 }
 
 void Controller::start()
@@ -153,17 +151,8 @@ void Controller::start()
         m_impl->algorithm = nullptr;
     }
 
-    //switch (m_impl->alg) {
-    //case Alg_Random:
-    //    m_impl->algorithm = new RandomAlgorithm { m_board };
-    //    break;
-    //case Alg_Minimax:
-        m_impl->algorithm = new MinimaxAlgorithm { m_impl->difficulty };
-        m_impl->algorithm->setBoard( m_board );
-    //    break;
-    //}
-        qDebug() << "difficulty: " << m_impl->difficulty;
-
+    m_impl->algorithm = new MinimaxAlgorithm { m_impl->difficulty };
+    m_impl->algorithm->setBoard( m_board );
 }
 
 void Controller::reset()

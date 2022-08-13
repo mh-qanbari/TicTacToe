@@ -4,23 +4,6 @@
 #include "Tile.h"
 #include <unordered_set>
 
-//template<>
-//struct std::hash<Tile>
-//{
-//    std::size_t operator()(const Tile &tile) const noexcept
-//    {
-//        return tile.getId();
-//    }
-//};
-
-//template<>
-//struct std::equal_to<Tile>
-//{
-//    bool operator()(const Tile &tile1, const Tile &tile2) const noexcept
-//    {
-//        return tile1.getId() == tile2.getId();
-//    }
-//};
 
 class Board : public QObject
 {
@@ -50,7 +33,6 @@ private:
     void initTiles();
 
 private:
-    //std::unordered_map<uint, Tile*> m_tiles {};
     std::vector<Tile*> m_tiles {};
     uint m_size  { 3 };
     const char __padding__[4] { " "};  //!< for padding

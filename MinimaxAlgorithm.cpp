@@ -28,40 +28,7 @@ Choice MinimaxAlgorithm::getChoice()
     m_impl->board.reset( std::move(getBoard()->clone()) );
     m_impl->step = 0;
 
-
-    // -- new version
     return runMin().choice;
-
-
-    // -- old version
-    //int bestScore { static_cast<int>(m_working->board->getSize() + 1) };
-    //uint bestTileId { 0 };
-    //bool isValid { false };
-    //
-    //auto emptyTileIds = m_working->board->getFilteredIds( Tile::State::None );
-    //if (emptyTileIds.empty())
-    //    return Choice();
-    //
-    //for (auto&& id : emptyTileIds)
-    //{
-    //    auto tile = m_working->board->getTile( id );
-    //    tile->setState( Tile::State::Computer );
-    //
-    //    const int score = minimax( m_depth, true );
-    //    if ( score < bestScore )
-    //    {
-    //        bestScore = score;
-    //        bestTileId = id;
-    //        isValid = true;
-    //    }
-    //
-    //    tile->setState( Tile::State::None );
-    //}
-    //
-    //Choice choice;
-    //choice.tileId = bestTileId;
-    //choice.isValid = isValid;
-    //return choice;
 }
 
 int MinimaxAlgorithm::minimax(const uint depth, const bool maximizing)
@@ -140,7 +107,6 @@ MinimaxAlgorithm::Result MinimaxAlgorithm::runMin()
         if (GameUtils::isWon(m_impl->board.get(), Tile::State::Computer))
         {
             score = minScore;
-            // TODO: no need to continue.
             result.score = minScore + 1;
             result.choice.tileId = id;
             result.choice.isValid = true;
@@ -202,7 +168,6 @@ MinimaxAlgorithm::Result MinimaxAlgorithm::runMax()
         if (GameUtils::isWon(m_impl->board.get(), Tile::State::User))
         {
             score = maxScore;
-            // TODO: no need to continue
             result.score = maxScore - 1;
             result.choice.tileId = id;
             result.choice.isValid = true;
