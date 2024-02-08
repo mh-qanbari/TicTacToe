@@ -1,15 +1,11 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
 
 Window {
     id: root
-    minimumHeight: height
-    maximumHeight: height
-    minimumWidth: width
-    maximumWidth: width
     //flags: Qt.SplashScreen
     flags: Qt.Dialog
     modality: Qt.ApplicationModal

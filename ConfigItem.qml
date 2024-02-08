@@ -1,7 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
-import QtQuick.Controls.Styles 1.4
 
 
 Item {
@@ -30,12 +29,14 @@ Item {
         to: controller.getDifficulty().max
         value: controller.getDifficulty().value
 
-        textFromValue: function() { return controller.getDifficultyText(value) }
+        textFromValue: function(value, locale) {
+            return controller.getDifficultyText()
+        }
 
         contentItem: Label {
             horizontalAlignment: Label.AlignHCenter
             verticalAlignment: Label.AlignVCenter
-            text: parent.textFromValue()
+            text: parent.textFromValue(parent.value)
             color: style.item.color
             font.pixelSize: 30
         }

@@ -42,9 +42,9 @@ Board &Board::operator=(Board &&other)
     return *this;
 }
 
-Board *&&Board::clone() const
+Board *Board::clone() const
 {
-    return std::move( new Board(*this) );
+    return new Board(*this);
 }
 
 void Board::reset()

@@ -17,7 +17,7 @@ public:
     Board &operator=(const Board &);
     Board &operator=(Board &&);
 
-    Board *&&clone() const;
+    Board *clone() const;
     void reset();
 
     Tile *getTile(const uint id) const;

@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Layouts 1.12
-import QtQuick.Dialogs 1.2
+import QtQuick.Dialogs
 
 import Tile.State 1.0
 
@@ -87,7 +87,7 @@ Item {
     }
     Connections {
         target: controller
-        onGameFinished: {
+        function onGameFinished(winner) {
             finishDialog.text =
                     (winner === Tile.User)
                     ? "User Won!"

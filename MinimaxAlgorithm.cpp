@@ -1,14 +1,12 @@
 #include "MinimaxAlgorithm.h"
 #include "GameUtils.h"
 #include "Board.h"
-#include <iostream>
 
 
 struct MinimaxAlgorithm::Impl
 {
     std::shared_ptr<Board> board { nullptr };
     uint step { 0 };
-    const char __padding__[4] { 0 };  //!< for padding
 };
 
 
@@ -24,8 +22,8 @@ MinimaxAlgorithm::MinimaxAlgorithm()
 }
 
 Choice MinimaxAlgorithm::getChoice()
-{    
-    m_impl->board.reset( std::move(getBoard()->clone()) );
+{
+    m_impl->board.reset( getBoard()->clone() );
     m_impl->step = 0;
 
     return runMin().choice;
