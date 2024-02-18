@@ -7,7 +7,11 @@ Window {
     width: 640
     height: 480
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("Tic Tac Toe")
 
-    Board { anchors.fill: parent }
+    Board {
+        anchors.centerIn: parent
+        width: Math.min(parent.width, parent.height)
+        height: width
+    }
 }
