@@ -6,4 +6,7 @@ qt_add_qml_module(${PROJECT_NAME}
     QML_FILES
         Board.qml
         Tile.qml
+    RESOURCES
+        icons/x.svg
+        icons/o.svg
 )
