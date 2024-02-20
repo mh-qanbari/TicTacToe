@@ -1,5 +1,7 @@
 import QtQuick
 
+import ui.types
+
 Grid {
     id: grid
     rows: 3
@@ -11,6 +13,14 @@ Grid {
 
     Repeater {
         model: 9
-        delegate: Tile { height: grid.cellSize; width: grid.cellSize }
+        delegate: TileItem {
+            id: tile
+            height: grid.cellSize; width: grid.cellSize
+            MouseArea {
+                anchors.fill: parent
+                enabled: tile.enabled
+                onClicked: tile.state = index % 2 === 0 ? Tile.X : Tile.O
+            }
+        }
     }
 }
