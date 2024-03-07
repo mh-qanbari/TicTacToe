@@ -1,14 +1,13 @@
-#include "ui/controller.h"
+#include "ui/Types.h"
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    ui::Controller *controller = ui::Controller::create();
+    ui::registerTileStateType();
 
     QQmlApplicationEngine engine;
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,

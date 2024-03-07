@@ -7,13 +7,16 @@ qt_add_qml_module(${PROJECT_NAME}
     VERSION 1.0
     QML_FILES
         Board.qml
+        DefaultPage.qml
         TileItem.qml
     RESOURCES
         icons/x.svg
         icons/o.svg
+        icons/next.svg
+        icons/prev.svg
     SOURCES
-        controller.h controller.cpp
-        TileState.h
+        tictactoe.h tictactoe.cpp
+        Types.h
 )
 
 target_link_libraries(${PROJECT_NAME}
