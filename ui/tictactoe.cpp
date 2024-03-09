@@ -9,6 +9,20 @@ TicTacToe *TicTacToe::create(QQmlEngine *, QJSEngine *)
     return s_instance;
 }
 
+void TicTacToe::setLevel(DifficultyLevel level)
+{
+    if (m_level == level)
+        return;
+    m_level = level;
+    emit levelChanged();
+}
+
+DifficultyLevel TicTacToe::getLevel() const
+{
+    assert(isGameStarted());
+    return m_level.value_or(DifficultyLevel::Medium);
+}
+
 QString TicTacToe::difficultyText(DifficultyLevel level) const
 {
     switch (level) {
@@ -19,3 +33,21 @@ QString TicTacToe::difficultyText(DifficultyLevel level) const
     return "";
 }
 
+void TicTacToe::startGame(DifficultyLevel level)
+{
+    setLevel(level);
+    emit gameStateChanged();
+}
+
+void TicTacToe::stopGame()
+{
+    if (!m_level.has_value())
+        return;
+    m_level.reset();
+    emit gameStateChanged();
+}
+
+bool TicTacToe::isGameStarted() const
+{
+    return m_level.has_value();
+}

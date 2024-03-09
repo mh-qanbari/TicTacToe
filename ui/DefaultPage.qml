@@ -23,6 +23,7 @@ Item {
                 implicitWidth: parent.width
                 text: TicTacToe.difficultyText(level)
                 Component.onCompleted: (index === 0) && forceActiveFocus()
+                onClicked: TicTacToe.startGame(level)
             }
         }
     }

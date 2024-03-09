@@ -13,12 +13,13 @@ ApplicationWindow {
         anchors.centerIn: parent
         width: parent.width * 0.5
         height: parent.height * 0.7
+        visible: !TicTacToe.isGameStarted
     }
 
     Board {
         anchors.centerIn: parent
         width: Math.min(parent.width, parent.height)
         height: width
-        visible: false
+        visible: TicTacToe.isGameStarted
     }
 }
