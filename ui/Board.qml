@@ -11,6 +11,8 @@ Item {
     readonly property int columns: BoardModel.columnCount()
     readonly property real cellSize: (width - 2 * padding - spacing * (columns - 1)) / columns
 
+    property TileState currentPlayer: Tile.X
+
     TableView {
         anchors.fill: root
         anchors.margins: root.padding
@@ -20,10 +22,16 @@ Item {
         delegate: TileItem {
             id: tile
             implicitHeight: root.cellSize; implicitWidth: root.cellSize
+            state: display
             MouseArea {
                 anchors.fill: parent
                 enabled: tile.enabled
-                onClicked: tile.state = index % 2 === 0 ? Tile.X : Tile.O
+                onClicked: {
+                    if (tile.state !== Tile.Undefined)
+                        return
+                    display = root.currentPlayer
+                    root.currentPlayer = (root.currentPlayer === Tile.X) ? Tile.O : Tile.X
+                }
             }
         }
     }

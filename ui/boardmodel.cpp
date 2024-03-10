@@ -3,7 +3,7 @@
 using namespace ui;
 
 BoardModel::BoardModel(QObject *parent)
-    : QAbstractTableModel(parent)
+    : QAbstractTableModel{parent}
 {
     m_data.fill(TileState::Undefined);
 }
@@ -27,6 +27,14 @@ QVariant BoardModel::data(const QModelIndex &index, int role) const
     return static_cast<int>(getTileState(index));
 }
 
+bool BoardModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    (void)role;
+    if (!index.isValid())
+        return false;
+    return setTileState(index, static_cast<TileState>(value.toInt()));
+}
+
 BoardModel *BoardModel::create(QQmlEngine *, QJSEngine *)
 {
     if (s_instance == nullptr)
@@ -34,9 +42,17 @@ BoardModel *BoardModel::create(QQmlEngine *, QJSEngine *)
     return s_instance;
 }
 
-TileState BoardModel::getTileState(const QModelIndex &modelIndex) const
+TileState BoardModel::getTileState(const QModelIndex &index) const
 {
-    if (!modelIndex.isValid())
+    if (!index.isValid())
         return TileState::Undefined;
-    return m_data.at(modelIndex.row() * rowCount() + modelIndex.column());
+    return m_data.at(index.row() * rowCount() + index.column());
+}
+
+bool BoardModel::setTileState(const QModelIndex &index, TileState state)
+{
+    if (!index.isValid())
+        return false;
+    m_data[index.row() * rowCount() + index.column()] = state;
+    return true;
 }
