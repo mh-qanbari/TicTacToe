@@ -1,25 +1,24 @@
+import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
 import ui
 
 ApplicationWindow {
-    width: 640
+    width: 480
     height: 480
     visible: true
     title: qsTr("Tic Tac Toe")
 
     DefaultPage {
-        anchors.centerIn: parent
-        width: parent.width * 0.5
-        height: parent.height * 0.7
+        anchors.fill: parent
+        anchors.margins: 40
         visible: !TicTacToe.isGameStarted
     }
 
     Board {
-        anchors.centerIn: parent
-        width: Math.min(parent.width, parent.height)
-        height: width
+        anchors.fill: parent
+        padding: 40
         visible: TicTacToe.isGameStarted
     }
 }

@@ -1,21 +1,25 @@
 import QtQuick
 
 import ui.types
+import ui
 
-Grid {
-    id: grid
-    rows: 3
-    columns: 3
-    spacing: 10
-    padding: 10
+Item {
+    id: root
+    property int spacing: 10
+    property int padding: 40
+    readonly property int rows: BoardModel.rowCount()
+    readonly property int columns: BoardModel.columnCount()
+    readonly property real cellSize: (width - 2 * padding - spacing * (columns - 1)) / columns
 
-    readonly property real cellSize: (width - padding*2 - spacing*(columns-1)) / columns
+    TableView {
+        anchors.fill: root
+        anchors.margins: root.padding
+        columnSpacing: root.spacing; rowSpacing: root.spacing
 
-    Repeater {
-        model: 9
+        model: BoardModel
         delegate: TileItem {
             id: tile
-            height: grid.cellSize; width: grid.cellSize
+            implicitHeight: root.cellSize; implicitWidth: root.cellSize
             MouseArea {
                 anchors.fill: parent
                 enabled: tile.enabled

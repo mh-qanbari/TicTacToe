@@ -38,8 +38,26 @@ signals:
     void gameStateChanged();
 
 private:
-    static inline TicTacToe *s_instance {nullptr};
+    static inline TicTacToe *s_instance = nullptr;
     std::optional<DifficultyLevel> m_level;
+
+    class Exception;
+};
+
+enum class ExceptionType {
+    GameNotStarted,
+};
+
+class TicTacToe::Exception : public std::exception
+{
+public:
+    Exception(ExceptionType type) : m_type(type) { }
+
+    // exception interface
+    virtual const char *what() const noexcept override;
+
+private:
+    ExceptionType m_type;
 };
 }
 

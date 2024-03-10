@@ -15,6 +15,7 @@ qt_add_qml_module(${PROJECT_NAME}
         icons/next.svg
         icons/prev.svg
     SOURCES
+        boardmodel.h boardmodel.cpp
         tictactoe.h tictactoe.cpp
         Types.h
 )

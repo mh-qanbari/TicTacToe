@@ -19,7 +19,8 @@ void TicTacToe::setLevel(DifficultyLevel level)
 
 DifficultyLevel TicTacToe::getLevel() const
 {
-    assert(isGameStarted());
+    if (!isGameStarted())
+        throw ExceptionType::GameNotStarted;
     return m_level.value_or(DifficultyLevel::Medium);
 }
 
@@ -50,4 +51,13 @@ void TicTacToe::stopGame()
 bool TicTacToe::isGameStarted() const
 {
     return m_level.has_value();
+}
+
+const char *TicTacToe::Exception::what() const noexcept
+{
+    switch (m_type) {
+    case ExceptionType::GameNotStarted: return "the game is not started.";
+    default: break;
+    }
+    return "unknown exception is thown";
 }
