@@ -9,6 +9,8 @@ TicTacToe *TicTacToe::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
         BoardModel::create(qmlEngine, jsEngine);
     if (s_instance == nullptr)
         s_instance = new TicTacToe;
+    s_instance->connect(BoardModel::instance(), &BoardModel::gameFinished,
+                        s_instance, &TicTacToe::stopGame);
     return s_instance;
 }
 

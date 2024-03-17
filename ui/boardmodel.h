@@ -39,6 +39,10 @@ private:
     int index(const QModelIndex &index) const;
     TileState getTileState(const QModelIndex &index) const;
     bool setTileState(const QModelIndex &index, TileState state);
+    bool isGameFinished(const QModelIndex &index);
+
+signals:
+    void gameFinished(TileState winner);
 
 private:
     static inline BoardModel *s_instance = nullptr;
