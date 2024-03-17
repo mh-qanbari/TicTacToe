@@ -1,9 +1,12 @@
 #include "tictactoe.h"
+#include "boardmodel.h"
 
 using namespace ui;
 
-TicTacToe *TicTacToe::create(QQmlEngine *, QJSEngine *)
+TicTacToe *TicTacToe::create(QQmlEngine *qmlEngine, QJSEngine *jsEngine)
 {
+    if (!BoardModel::instance())
+        BoardModel::create(qmlEngine, jsEngine);
     if (s_instance == nullptr)
         s_instance = new TicTacToe;
     return s_instance;

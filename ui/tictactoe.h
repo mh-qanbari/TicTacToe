@@ -15,13 +15,18 @@ class TicTacToe : public QObject
     Q_PROPERTY(DifficultyLevel level READ getLevel NOTIFY levelChanged FINAL)
     Q_PROPERTY(bool isGameStarted READ isGameStarted NOTIFY gameStateChanged FINAL)
 
+protected:
+    TicTacToe(QObject *parent = nullptr) : QObject{parent} { }
+
 public:
     Q_INVOKABLE QString difficultyText(DifficultyLevel level) const;
-    Q_INVOKABLE void startGame(DifficultyLevel level);
-    Q_INVOKABLE void stopGame();
     Q_INVOKABLE bool isGameStarted() const;
 
     static TicTacToe *create(QQmlEngine *, QJSEngine *);
+
+public slots:
+    Q_INVOKABLE void startGame(DifficultyLevel level);
+    Q_INVOKABLE void stopGame();
 
 protected:
     void setLevel(DifficultyLevel level);

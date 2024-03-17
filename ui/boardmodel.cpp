@@ -35,6 +35,13 @@ bool BoardModel::setData(const QModelIndex &index, const QVariant &value, int ro
     return setTileState(index, static_cast<TileState>(value.toInt()));
 }
 
+QModelIndex BoardModel::index(int row, int column, const QModelIndex &parent) const
+{
+    if (parent.isValid())
+        return QModelIndex{};
+    return createIndex(row, column);
+}
+
 BoardModel *BoardModel::create(QQmlEngine *, QJSEngine *)
 {
     if (s_instance == nullptr)
@@ -42,17 +49,22 @@ BoardModel *BoardModel::create(QQmlEngine *, QJSEngine *)
     return s_instance;
 }
 
-TileState BoardModel::getTileState(const QModelIndex &index) const
+int BoardModel::index(const QModelIndex &modelIndex) const
 {
-    if (!index.isValid())
+    return modelIndex.row() * rowCount() + modelIndex.column();
+}
+
+TileState BoardModel::getTileState(const QModelIndex &modelIndex) const
+{
+    if (!modelIndex.isValid())
         return TileState::Undefined;
-    return m_data.at(index.row() * rowCount() + index.column());
+    return m_data.at(index(modelIndex));
 }
 
 bool BoardModel::setTileState(const QModelIndex &index, TileState state)
 {
     if (!index.isValid())
         return false;
-    m_data[index.row() * rowCount() + index.column()] = state;
+    m_data[this->index(index)] = state;
     return true;
 }

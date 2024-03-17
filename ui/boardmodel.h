@@ -14,23 +14,29 @@ class BoardModel : public QAbstractTableModel
     QML_ELEMENT
     QML_SINGLETON
 
-public:
+protected:
     BoardModel(QObject *parent = nullptr);
 
+public:
     // QAbstractItemModel interface
     virtual int rowCount(const QModelIndex &parent = QModelIndex{}) const override;
     virtual int columnCount(const QModelIndex &parent = QModelIndex{}) const override;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::DisplayRole) override;
+    virtual bool setData(const QModelIndex &index,
+                         const QVariant &value,
+                         int role = Qt::DisplayRole) override;
+    virtual QModelIndex index(int row, int column,
+                              const QModelIndex &parent = QModelIndex{}) const override;
 
-    static BoardModel *create(QQmlEngine *, QJSEngine *);
     //! -------------------------------------------------------------
     //! \brief instance returns the instance.
     //! \details the instance is nullptr if it has not been created yet.
     //! \return returns the instance
     static BoardModel *instance() { return s_instance; }
+    static BoardModel *create(QQmlEngine *, QJSEngine *);
 
 private:
+    int index(const QModelIndex &index) const;
     TileState getTileState(const QModelIndex &index) const;
     bool setTileState(const QModelIndex &index, TileState state);
 
