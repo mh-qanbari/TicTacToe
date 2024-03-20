@@ -42,6 +42,7 @@ QString TicTacToe::difficultyText(DifficultyLevel level) const
 void TicTacToe::startGame(DifficultyLevel level)
 {
     setLevel(level);
+    BoardModel::instance()->clearItemData();
     emit gameStateChanged();
 }
 

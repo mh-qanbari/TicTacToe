@@ -45,6 +45,20 @@ QModelIndex BoardModel::index(int row, int column, const QModelIndex &parent) co
     return createIndex(row, column);
 }
 
+bool BoardModel::clearItemData(const QModelIndex &modelIndex)
+{
+    if (modelIndex.isValid()) {
+        const int index = this->index(modelIndex);
+        m_data[index] = PlayerFlag::Undefined;
+        emit dataChanged(modelIndex, modelIndex, {});
+    } else {
+        for (auto it = m_data.begin(); it != m_data.end(); ++it)
+            *it = PlayerFlag::Undefined;
+        emit dataChanged(index(0, 0), index(rowCount(), columnCount()));
+    }
+    return true;
+}
+
 BoardModel *BoardModel::create(QQmlEngine *, QJSEngine *)
 {
     if (s_instance == nullptr)

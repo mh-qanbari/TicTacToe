@@ -27,6 +27,7 @@ public:
                          int role = Qt::DisplayRole) override;
     virtual QModelIndex index(int row, int column,
                               const QModelIndex &parent = QModelIndex{}) const override;
+    virtual bool clearItemData(const QModelIndex &index = QModelIndex{}) override;
 
     //! -------------------------------------------------------------
     //! \brief instance returns the instance.
