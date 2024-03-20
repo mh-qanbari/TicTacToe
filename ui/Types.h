@@ -13,20 +13,20 @@ enum class DifficultyLevel {
 Q_ENUM_NS(DifficultyLevel)
 
 Q_NAMESPACE
-enum class TileState {
+enum class PlayerFlag {
     Undefined = 0,
     X,
     O,
 };
-Q_ENUM_NS(TileState)
+Q_ENUM_NS(PlayerFlag)
 
-static inline void registerTileStateType() {
+static inline void registerTypes() {
     qmlRegisterUncreatableMetaObject(ui::staticMetaObject,
                                      "ui.types",
                                      1, 0,
-                                     "Tile",
-                                     "Because TileState is enum");
-    qmlRegisterType<TileState>("ui.types", 1, 0, "TileState");
+                                     "Player",
+                                     "Because PlayerFlag is enum");
+    qmlRegisterType<PlayerFlag>("ui.types", 1, 0, "PlayerFlag");
 
     qmlRegisterUncreatableMetaObject(ui::staticMetaObject,
                                      "ui.types",

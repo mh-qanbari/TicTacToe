@@ -3,7 +3,7 @@
 
 using namespace ui;
 
-Player::Player(TileState sign, QObject *parent)
+Player::Player(PlayerFlag sign, QObject *parent)
     : QObject{parent}
     , m_sign{sign}
 {}
@@ -16,7 +16,7 @@ void Player::select(const QModelIndex &index)
     board_model->setData(index, static_cast<int>(m_sign));
 }
 
-Player *Player::getPlayer(TileState sign)
+Player *Player::getPlayer(PlayerFlag sign)
 {
     if (auto it = s_instances.find(sign); it != s_instances.end())
         return it->second;

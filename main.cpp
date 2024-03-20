@@ -6,8 +6,8 @@
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-
-    ui::registerTileStateType();
+    
+    ui::registerTypes();
 
     QQmlApplicationEngine engine;
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,

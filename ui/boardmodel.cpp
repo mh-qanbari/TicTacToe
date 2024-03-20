@@ -5,7 +5,7 @@ using namespace ui;
 BoardModel::BoardModel(QObject *parent)
     : QAbstractTableModel{parent}
 {
-    m_data.fill(TileState::Undefined);
+    m_data.fill(PlayerFlag::Undefined);
 }
 
 int BoardModel::rowCount(const QModelIndex &parent) const
@@ -24,7 +24,7 @@ QVariant BoardModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant{};
-    return static_cast<int>(getTileState(index));
+    return static_cast<int>(getTileFlag(index));
 }
 
 bool BoardModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -32,7 +32,7 @@ bool BoardModel::setData(const QModelIndex &index, const QVariant &value, int ro
     (void)role;
     if (!index.isValid())
         return false;
-    const bool ok = setTileState(index, static_cast<TileState>(value.toInt()));
+    const bool ok = setTileFlag(index, static_cast<PlayerFlag>(value.toInt()));
     if (ok)
         emit dataChanged(index, index, {role,});
     return ok;
@@ -57,14 +57,14 @@ int BoardModel::index(const QModelIndex &modelIndex) const
     return modelIndex.row() * rowCount() + modelIndex.column();
 }
 
-TileState BoardModel::getTileState(const QModelIndex &modelIndex) const
+PlayerFlag BoardModel::getTileFlag(const QModelIndex &modelIndex) const
 {
     if (!modelIndex.isValid())
-        return TileState::Undefined;
+        return PlayerFlag::Undefined;
     return m_data.at(index(modelIndex));
 }
 
-bool BoardModel::setTileState(const QModelIndex &index, TileState state)
+bool BoardModel::setTileFlag(const QModelIndex &index, PlayerFlag state)
 {
     if (!index.isValid())
         return false;
@@ -78,32 +78,32 @@ bool BoardModel::isGameFinished(const QModelIndex &modelIndex)
 {
     const int row = modelIndex.row();
     const int column = modelIndex.column();
-    const TileState player_sign = getTileState(modelIndex);
+    const PlayerFlag player_sign = getTileFlag(modelIndex);
 
     // check row
-    if ((player_sign == getTileState(index(row, 0))) &&
-        (player_sign == getTileState(index(row, 1))) &&
-        (player_sign == getTileState(index(row, 2))))
+    if ((player_sign == getTileFlag(index(row, 0))) &&
+        (player_sign == getTileFlag(index(row, 1))) &&
+        (player_sign == getTileFlag(index(row, 2))))
         return true;
 
     // check column
-    else if ((player_sign == getTileState(index(0, column))) &&
-             (player_sign == getTileState(index(1, column))) &&
-             (player_sign == getTileState(index(2, column))))
+    else if ((player_sign == getTileFlag(index(0, column))) &&
+             (player_sign == getTileFlag(index(1, column))) &&
+             (player_sign == getTileFlag(index(2, column))))
         return true;
 
     // check orthogonal: top-left to bottom-right
     else if ((column == row) &&
-             (player_sign == getTileState(index(0, 0))) &&
-             (player_sign == getTileState(index(1, 1))) &&
-             (player_sign == getTileState(index(2, 2))))
+             (player_sign == getTileFlag(index(0, 0))) &&
+             (player_sign == getTileFlag(index(1, 1))) &&
+             (player_sign == getTileFlag(index(2, 2))))
         return true;
 
     // check orthogonal: top-right to bottom-left
     else if ((column + row == 2) &&
-             (player_sign == getTileState(index(0, 2))) &&
-             (player_sign == getTileState(index(1, 1))) &&
-             (player_sign == getTileState(index(2, 0))))
+             (player_sign == getTileFlag(index(0, 2))) &&
+             (player_sign == getTileFlag(index(1, 1))) &&
+             (player_sign == getTileFlag(index(2, 0))))
         return true;
 
     return false;

@@ -37,16 +37,16 @@ public:
 
 private:
     int index(const QModelIndex &index) const;
-    TileState getTileState(const QModelIndex &index) const;
-    bool setTileState(const QModelIndex &index, TileState state);
+    PlayerFlag getTileFlag(const QModelIndex &index) const;
+    bool setTileFlag(const QModelIndex &index, PlayerFlag state);
     bool isGameFinished(const QModelIndex &index);
 
 signals:
-    void gameFinished(TileState winner);
+    void gameFinished(PlayerFlag winner);
 
 private:
     static inline BoardModel *s_instance = nullptr;
-    std::array<TileState, 9> m_data;
+    std::array<PlayerFlag, 9> m_data;
 };
 }
 

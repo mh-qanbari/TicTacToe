@@ -6,15 +6,15 @@ import ui.types
 Rectangle {
     id: tile
     color: "yellow"
-    enabled: state === Tile.Undefined
-    property TileState state: Tile.Undefined
+    enabled: flag === Player.Undefined
+    property PlayerFlag flag: Player.Undefined
     IconLabel {
         anchors.fill: parent
-        icon.source: getStateIcon(tile.state)
+        icon.source: getStateIcon(tile.flag)
         function getStateIcon(state) {
             switch (state) {
-                case Tile.X: return "icons/x.svg";
-                case Tile.O: return "icons/o.svg";
+                case Player.X: return "icons/x.svg";
+                case Player.O: return "icons/o.svg";
                 default: return "";
             }
         }
